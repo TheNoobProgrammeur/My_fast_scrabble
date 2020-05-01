@@ -6,28 +6,27 @@
 #include <string>
 #include <stack>
 #include <map>
-#include <csignal>
 #include <bits/stdc++.h>
 
 using namespace std;
 
-void my_handler(int s);
 bool isAnagrame(string a, string b);
 void pars_args(int argc, char **argv);
 bool compare_nocase (const std::string& first, const std::string& second);
 
 string D_PARAM;
-bool active = true;
+int EXIT_CODE = 1;
+
+struct my_tolower
+{
+    char operator()(char c) const
+    {
+        return tolower(static_cast<unsigned char>(c));
+    }
+};
+
 
 int main(int argc, char** argv){
-
-
-
-    struct sigaction sigIntHandler;
-    sigIntHandler.sa_handler = my_handler;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-    sigaction(SIGINT, &sigIntHandler, NULL);
 
     pars_args(argc,argv);
 
@@ -42,7 +41,7 @@ int main(int argc, char** argv){
         while ( getline (dico,word_file) )
         {
             //cout << word_file << endl;
-            lengt_word_file = word_file.length();
+            lengt_word_file = word_file.size();
 
             if(map_dico.find(lengt_word_file) != map_dico.end()){
                 section_dico = (stack<string>) map_dico.at(lengt_word_file);
@@ -56,30 +55,34 @@ int main(int argc, char** argv){
         }
     }
     else return 3;
+
     dico.close();
 
+    cout << "Dico pret " << endl;
     string word;
     int word_id;
 
-    while(active)
+    while(cin >>  word)
     {
 
         list<string> test;
         list<string>::iterator it;
-
-        getline (cin, word);
-
+        //cout << word << endl;
         word_id = word.size();
-        section_dico = (stack<string>) map_dico.at(word_id);
+        if(word_id<1){
+            exit(EXIT_CODE);
+        }
+
+        if(map_dico.count(word_id) > 0){
+            section_dico = (stack<string>) map_dico.at(word_id);
+        }
+
 
         while (section_dico.size() > 0) {
-
             string a = section_dico.top();
-
             if (isAnagrame(word, a)) {
                 test.push_back(a);
             }
-
             section_dico.pop();
         }
 
@@ -88,17 +91,13 @@ int main(int argc, char** argv){
             std::cout << *it << endl;
     }
 
-    return 0;
-}
-
-void my_handler(int s){
-    printf("Caught signal %d\n",s);
-    printf("Exit Programme %d\n",s);
-    active = false;
-    exit(0);
+    return EXIT_CODE;
 }
 
 bool isAnagrame(string a, string b){
+
+    transform(a.begin(), a.end(), a.begin(), my_tolower());
+    transform(b.begin(), b.end(), b.begin(), my_tolower());
 
     sort(a.begin(), a.end());
     sort(b.begin(), b.end());
@@ -106,7 +105,7 @@ bool isAnagrame(string a, string b){
     for (int i = 0; i < int(a.length()); i++)
         if (a[i] != b[i])
             return false;
-
+    EXIT_CODE = 0;
     return true;
 }
 
