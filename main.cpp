@@ -44,9 +44,7 @@ int main(int argc, char** argv){
             lengt_word_file = word_file.size();
 
             if(map_dico.find(lengt_word_file) != map_dico.end()){
-                section_dico = (stack<string>) map_dico.at(lengt_word_file);
-                section_dico.push(word_file);
-                map_dico[lengt_word_file] = section_dico;
+                map_dico.at(lengt_word_file).push(word_file);
             } else {
                 stack<string> new_section;
                 new_section.push(word_file);
