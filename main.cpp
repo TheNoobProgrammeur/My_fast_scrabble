@@ -56,25 +56,23 @@ int main(int argc, char** argv){
 
     dico.close();
 
-    cout << "Dico pret " << endl;
     string word;
     int word_id;
 
+
+
     while(cin >>  word)
     {
-
         list<string> test;
         list<string>::iterator it;
-        //cout << word << endl;
+
         word_id = word.size();
         if(word_id<1){
             exit(EXIT_CODE);
         }
-
         if(map_dico.count(word_id) > 0){
             section_dico = (stack<string>) map_dico.at(word_id);
         }
-
 
         while (section_dico.size() > 0) {
             string a = section_dico.top();
