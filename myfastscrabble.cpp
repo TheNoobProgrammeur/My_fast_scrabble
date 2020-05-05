@@ -63,7 +63,7 @@ int main(int argc, char** argv){
 
     while(cin >>  word)
     {
-        list<string> test;
+        list<string> anagramme;
         list<string>::iterator it;
 
         word_id = word.size();
@@ -77,13 +77,13 @@ int main(int argc, char** argv){
         while (section_dico.size() > 0) {
             string a = section_dico.top();
             if (isAnagrame(word, a)) {
-                test.push_back(a);
+                anagramme.push_back(a);
             }
             section_dico.pop();
         }
 
-        test.sort(compare_nocase);
-        for (it = test.begin(); it != test.end(); ++it)
+        anagramme.sort(compare_nocase);
+        for (it = anagramme.begin(); it != anagramme.end(); ++it)
             std::cout << *it << endl;
     }
 
@@ -107,7 +107,7 @@ bool isAnagrame(string a, string b){
 
 void pars_args(int argc, char **argv){
 
-    if (argc < 3 ){
+    if (argc !=  3 ){
         exit(2);
     }
 
